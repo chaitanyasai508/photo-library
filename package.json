@@ -14,6 +14,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-layout-masonry": "^1.1.0",
     "react-photo-album": "^3.0.1",
     "yet-another-react-lightbox": "^3.21.3"
   },

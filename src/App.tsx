@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from "react";
 import "react-photo-album/rows.css";
-import React from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -15,10 +14,10 @@ import Masonry from 'react-layout-masonry';
 
 export default function App() {
   const [index, setIndex] = useState(-1);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([] as any);
 
   const loadAlbums = async (token: string, repo: string) => {
-      fetch(`https://api.github.com/repos/chaitanyasai508/ved-newborn-shoot/contents/images/?ref=main`, {
+      fetch(`https://api.github.com/repos/chaitanyasai508/${repo}/contents/images/?ref=main`, {
       headers: {
         Accept: 'application/vnd.github+json',
         Authorization: 'Bearer '+ token,
@@ -44,7 +43,7 @@ export default function App() {
   return (
     <>
       <Masonry columns={3} gap={10} >
-          {images.map((i, index) => <img src={i.src} style={{width: "100%", display: "block", borderRadius: 10}} onClick={() => setIndex(index)}></img>)}
+          {images.map((i:any, index:any) => <img src={i.src} style={{width: "100%", display: "block", borderRadius: 10}} onClick={() => setIndex(index)}></img>)}
       </Masonry>
       <Lightbox
         slides={images}
