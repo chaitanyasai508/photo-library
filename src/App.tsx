@@ -16,11 +16,11 @@ export default function App() {
   const [index, setIndex] = useState(-1);
   const [images, setImages] = useState([] as any);
 
-  const loadAlbums = async (token: string, repo: string) => {
+  const loadAlbums = async (repo: string) => {
       fetch(`https://api.github.com/repos/chaitanyasai508/${repo}/contents/images/?ref=main`, {
       headers: {
         Accept: 'application/vnd.github+json',
-        Authorization: 'Bearer '+ token,
+        Authorization: 'Bearer '+ process.env.PASS_KEY,
         'X-GitHub-Api-Version': '2022-11-28'
       },
     })
@@ -33,10 +33,10 @@ export default function App() {
   };
 
   useEffect(() => {
-    const token = window.prompt("Enter password");
-    if(token){
-      loadAlbums(token, 'ved-newborn-shoot');
-    }
+    // const token = window.prompt("Enter password");
+    // if(token){
+      loadAlbums('ved-newborn-shoot');
+    // }
   }, [])
 
 
