@@ -1,8 +1,7 @@
-import { useState } from "react";
 
-import { RowsPhotoAlbum } from "react-photo-album";
+import { useEffect, useState } from "react";
 import "react-photo-album/rows.css";
-
+import React from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -12,22 +11,46 @@ import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-
-import photos from "./photos";
+import Masonry from 'react-layout-masonry';
 
 export default function App() {
   const [index, setIndex] = useState(-1);
+  const [images, setImages] = useState([]);
+
+  const loadAlbums = async (token: string, repo: string) => {
+      fetch(`https://api.github.com/repos/chaitanyasai508/ved-newborn-shoot/contents/images/?ref=main`, {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: 'Bearer '+ token,
+        'X-GitHub-Api-Version': '2022-11-28'
+      },
+    })
+    .then(resp => resp.json())
+    .then((json:any) => {
+      const images = json.map(({download_url}:any) => ({src: download_url}))
+      console.log(json);
+      setImages(images)
+    })
+  };
+
+  useEffect(() => {
+    const token = window.prompt("Enter password");
+    if(token){
+      loadAlbums(token, 'ved-newborn-shoot');
+    }
+  }, [])
+
 
   return (
     <>
-      <RowsPhotoAlbum photos={photos} targetRowHeight={150} onClick={({ index }) => setIndex(index)} />
-
+      <Masonry columns={3} gap={10} >
+          {images.map((i, index) => <img src={i.src} style={{width: "100%", display: "block", borderRadius: 10}} onClick={() => setIndex(index)}></img>)}
+      </Masonry>
       <Lightbox
-        slides={photos}
+        slides={images}
         open={index >= 0}
         index={index}
         close={() => setIndex(-1)}
-        // enable optional lightbox plugins
         plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
       />
     </>
